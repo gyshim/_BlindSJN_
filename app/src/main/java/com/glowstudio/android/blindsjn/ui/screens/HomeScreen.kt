@@ -281,6 +281,7 @@ fun SalesSection() {
 }
 
 @Composable
+//샘플용 원형 그래프
 fun CircularSalesChart(percentage: Float, label: String) {
     Box(
         modifier = Modifier
