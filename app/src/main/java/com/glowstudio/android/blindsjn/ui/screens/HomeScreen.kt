@@ -38,10 +38,20 @@ import java.net.URLEncoder
 import androidx.navigation.compose.rememberNavController
 import com.glowstudio.android.blindsjn.ui.theme.BlindSJNTheme
 import androidx.core.text.HtmlCompat
-import androidx.compose.material.icons.filled.ThumbUp
-import androidx.compose.material.icons.filled.ChatBubbleOutline
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+/**
+ * Displays the main home screen with banner, shortcuts, news, and sales sections in a vertically scrollable layout.
+ *
+ * @param navController Navigation controller used for handling navigation actions within the screen.
+ */
 @Composable
 fun HomeScreen(navController: NavHostController) {
     val scrollState = rememberScrollState()
@@ -60,9 +70,6 @@ fun HomeScreen(navController: NavHostController) {
 
         // 네이버 뉴스 섹션
         NaverNewsSection(navController)
-
-        // 인기글 섹션
-        HotPostsSection(navController)
 
         // 오늘의 매출 관리 섹션
         SalesSection()
@@ -177,85 +184,13 @@ private val shortcutItems = listOf(
     ShortcutItem("캘린더", "📅")
 )
 
-@Composable
-fun HotPostsSection(navController: NavHostController) {
-    // 예시 데이터
-    val hotPosts = listOf(
-        HotPost("인기글 1", "05/07", 11, 4),
-        HotPost("인기글 2", "04/29", 10, 0),
-        HotPost("인기글 3", "04/29", 13, 0),
-        HotPost("인기글 4", "04/28", 25, 8)
-    )
-
-    Column(modifier = Modifier.padding(16.dp)) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("인기글글", fontWeight = FontWeight.Bold)
-            TextButton(onClick = { navController.navigate("popular") }) {
-                Text("더 보기")
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // 라운드 사각형 카드로 전체 감싸기
-        Surface(
-
-            shape = RoundedCornerShape(20.dp),
-            tonalElevation = 1.dp,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column {
-                hotPosts.forEachIndexed { idx, post ->
-                    HotPostListItem(post)
-                    // 마지막 아이템이 아니면 Divider 추가
-                    if (idx != hotPosts.lastIndex) {
-                        Divider(
-                            color = Color(0xFFE0E0E0),
-                            thickness = 1.dp,
-                            modifier = Modifier.padding(horizontal = 12.dp)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-data class HotPost(
-    val title: String,
-    val date: String,
-    val likeCount: Int,
-    val commentCount: Int
-)
-
-@Composable
-fun HotPostListItem(post: HotPost) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 18.dp, vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(post.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(post.date, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Filled.ThumbUp, contentDescription = "좋아요", tint = Color.Red, modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("${post.likeCount}", color = Color.Red, style = MaterialTheme.typography.bodySmall)
-            Spacer(modifier = Modifier.width(12.dp))
-            Icon(Icons.Filled.ChatBubbleOutline, contentDescription = "댓글", tint = Color(0xFF00B8D9), modifier = Modifier.size(18.dp))
-            Spacer(modifier = Modifier.width(4.dp))
-            Text("${post.commentCount}", color = Color(0xFF00B8D9), style = MaterialTheme.typography.bodySmall)
-        }
-    }
-}
-
+/**
+ * Displays a horizontally scrollable section of news articles with loading and error states.
+ *
+ * Fetches and observes news articles related to "자영업" ("self-employed") on first composition.
+ * Shows a loading indicator while fetching, an error message if loading fails, or a list of news articles otherwise.
+ * Each article is presented in a clickable card that navigates to a detailed view when selected.
+ */
 @Composable
 fun NaverNewsSection(navController: NavHostController) {
     val viewModel: NewsViewModel = viewModel()
@@ -319,6 +254,11 @@ fun NaverNewsSection(navController: NavHostController) {
                                         maxLines = 3,
                                         overflow = TextOverflow.Ellipsis
                                     )
+//                                    Text(
+//                                        text = HtmlCompat.fromHtml(article.link, HtmlCompat.FROM_HTML_MODE_LEGACY).toString(),
+//                                        maxLines = 3,
+//                                        overflow = TextOverflow.Ellipsis
+//                                    )
                                 }
                             }
                         }
@@ -329,6 +269,11 @@ fun NaverNewsSection(navController: NavHostController) {
     }
 }
 
+/**
+ * Displays the sales management section with a circular progress chart for today's sales.
+ *
+ * Shows a titled section containing a circular chart representing 65% progress, labeled accordingly.
+ */
 @Composable
 fun SalesSection() {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -340,19 +285,64 @@ fun SalesSection() {
             Text("오늘의 매출 관리", fontWeight = FontWeight.Bold)
             Icon(Icons.Default.KeyboardArrowRight, contentDescription = "더보기")
         }
-        
+
         Spacer(modifier = Modifier.height(8.dp))
-        
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-           // 여기에 뭐 넣을지 고민 좀 해봐야 함
-
+            CircularSalesChart(percentage = 0.65f, label = "65%")
         }
     }
 }
 
+/**
+ * Displays a circular progress chart with a percentage arc and a centered label.
+ *
+ * @param percentage The progress value as a fraction between 0 and 1, determining the arc length.
+ * @param label The text displayed at the center of the chart.
+ */
+@Composable
+//샘플용 원형 그래프
+fun CircularSalesChart(percentage: Float, label: String) {
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Canvas(modifier = Modifier.size(100.dp)) {
+            val sweepAngle = percentage * 360f
+
+            drawArc(
+                color = Color.LightGray,
+                startAngle = 0f,
+                sweepAngle = 360f,
+                useCenter = false,
+                style = Stroke(width = 16f, cap = StrokeCap.Round)
+            )
+            drawArc(
+                color = Color.Blue,
+                startAngle = -90f,
+                sweepAngle = sweepAngle,
+                useCenter = false,
+                style = Stroke(width = 16f, cap = StrokeCap.Round)
+            )
+        }
+
+        Text(
+            text = label,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+        )
+    }
+}
+
+
+/**
+ * Displays a preview of the HomeScreen composable within the app theme for design-time inspection.
+ */
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {

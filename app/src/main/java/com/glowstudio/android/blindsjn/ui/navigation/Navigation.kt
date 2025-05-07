@@ -13,6 +13,16 @@ import com.google.gson.Gson
 import java.net.URLDecoder
 import androidx.compose.material.Text
 
+/**
+ * Sets up the navigation graph for the app, managing screen transitions and top bar state.
+ *
+ * Defines all navigation routes and their associated composable screens, handling argument extraction,
+ * top bar updates, and navigation callbacks for user actions. This function centralizes navigation logic
+ * and ensures the top bar reflects the current screen's context.
+ *
+ * @param navController Controls navigation between composable destinations.
+ * @param topBarViewModel Manages the state of the top bar for each screen.
+ */
 @Composable
 fun AppNavHost(
     navController: NavHostController,
@@ -60,7 +70,8 @@ fun AppNavHost(
                     title = article.title ?: "제목 없음",
                     content = article.content,
                     description = article.description,
-                    imageUrl = article.urlToImage
+                    imageUrl = article.urlToImage,
+                    link = article.link
                 )
             } else {
                 Text("기사를 불러오는 데 실패했습니다.")
@@ -94,9 +105,9 @@ fun AppNavHost(
             PostDetailScreen(navController = navController, postId = postId)
         }
 
-        composable("popular") {
-            topBarViewModel.updateState(TopBarState("인기글", false, false))
-            PopularScreen()
+        composable("management") {
+            topBarViewModel.updateState(TopBarState("매출관리", false, false))
+            ManagementScreen()
         }
 
         composable("message") {

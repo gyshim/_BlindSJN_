@@ -23,19 +23,26 @@ import androidx.compose.foundation.layout.padding
 sealed class Screen(val route: String, val title: String, val icon: ImageVector) {
     object Home : Screen("home", "홈화면", Icons.Default.Home)
     object Posts : Screen("board", "게시판 목록", Icons.Default.GridView)
-    object Popular : Screen("popular", "인기글", Icons.Default.ThumbUp)
+    object Managerment : Screen("management", "매출관리", Icons.Default.ShoppingCart)
     object Messages : Screen("message", "캘린더", Icons.Default.CalendarToday)
     object Profile : Screen("profile", "프로필", Icons.Default.Person)
     // 아이콘은 material design에서 제공하는 기본 이미지를 사용하여 제작함
     // 추후 변경 예정. 좀 못생겨도 참아주시길
 }
 
+/**
+ * Displays a bottom navigation bar with selectable items for app navigation.
+ *
+ * Shows navigation items for each defined screen, highlights the selected item based on the current navigation route, and navigates to the corresponding screen when an item is clicked. Navigation state is preserved and restored as appropriate.
+ *
+ * @param navController The NavController used to manage navigation between screens.
+ */
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         Screen.Home,
         Screen.Posts,
-        Screen.Popular,
+        Screen.Managerment,
         Screen.Messages,
         Screen.Profile
     )
