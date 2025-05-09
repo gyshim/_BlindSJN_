@@ -57,6 +57,17 @@ fun CommonTextField(
     )
 }
 
+/**
+ * Displays a customizable button with optional loading indicator.
+ *
+ * When `isLoading` is true, the button is disabled and shows a circular progress indicator instead of the text.
+ *
+ * @param text The text to display on the button.
+ * @param onClick Callback invoked when the button is clicked.
+ * @param modifier Modifier to apply to the button layout.
+ * @param enabled Whether the button is enabled for interaction.
+ * @param isLoading Whether to show a loading indicator and disable the button.
+ */
 @Composable
 fun CommonButton(
     text: String,

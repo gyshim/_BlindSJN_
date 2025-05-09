@@ -7,7 +7,12 @@ object BusinessCertRepository {
 
     private const val SERVICE_KEY = "oMaLHlh2WsmH9%2FejOxmPKKA8tV7MiQNcyt2HF9ca0cCQfUdUoNisHpBiYMJfzh%2BGzQYLNrJSaw5yKyAJWUz7cg%3D%3D" // 인증키 (Encoding)
 
-    // 사업자 등록번호 진위 확인 API 호출
+    /**
+     * Verifies the validity of a business registration number using an external API.
+     *
+     * @param businessNumber The business registration number to validate.
+     * @return `true` if the business number is valid according to the API response; `false` otherwise or if an error occurs.
+     */
     suspend fun checkBusinessNumberValidity(businessNumber: String): Boolean {
         return try {
             val response: Response<BusinessCheckResponse> = PublicApiRetrofitInstance.api.checkBusinessNumberValidity(

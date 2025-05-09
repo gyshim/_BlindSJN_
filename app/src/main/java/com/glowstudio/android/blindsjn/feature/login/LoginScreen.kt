@@ -31,6 +31,15 @@ import com.glowstudio.android.blindsjn.ui.components.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 // 로그인 함수 (서버 통신)
+/**
+ * Attempts to authenticate a user with the provided phone number and password.
+ *
+ * Sends a login request to the server and returns `true` if authentication is successful, or `false` otherwise.
+ *
+ * @param phoneNumber The user's phone number.
+ * @param password The user's password.
+ * @return `true` if login is successful; `false` if credentials are invalid or a network error occurs.
+ */
 suspend fun login(phoneNumber: String, password: String): Boolean {
     val request = LoginRequest(phoneNumber, password)
     val response = InternalServer.api.login(request)
@@ -45,6 +54,15 @@ suspend fun login(phoneNumber: String, password: String): Boolean {
     }
 }
 
+/**
+ * Displays the login screen UI, handling user input, login actions, and related dialogs.
+ *
+ * Presents input fields for phone number and password, auto-login toggle, and navigation options for sign-up and password recovery. Manages UI state and side effects via the provided [LoginViewModel]. Shows appropriate dialogs for empty fields, invalid credentials, and network errors. Invokes [onLoginClick] upon successful login, and provides callbacks for sign-up and password reset actions.
+ *
+ * @param onLoginClick Called with `true` when login succeeds.
+ * @param onSignupClick Invoked when the user selects the sign-up option.
+ * @param onForgotPasswordClick Invoked when the user selects the forgot password option.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -219,6 +237,9 @@ fun LoginScreen(
     }
 }
 
+/**
+ * Displays a preview of the login screen composable with default callback implementations.
+ */
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {
