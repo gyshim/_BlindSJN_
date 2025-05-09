@@ -18,6 +18,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.glowstudio.android.blindsjn.data.model.Post
 import com.glowstudio.android.blindsjn.ui.viewModel.PostViewModel
 
+/**
+ * Displays the board detail screen with a list of posts filtered by category.
+ *
+ * Shows a category filter row, a floating action button for creating new posts, and a list of posts that can be filtered by the selected category. Posts and status messages are loaded and observed from the view model. Navigates to the post creation screen when the floating action button is pressed.
+ *
+ * @param navController Used for navigation between screens.
+ * @param title The title of the board to display.
+ */
 @Composable
 fun BoardDetailScreen(navController: NavController, title: String) {
     val viewModel: PostViewModel = viewModel()

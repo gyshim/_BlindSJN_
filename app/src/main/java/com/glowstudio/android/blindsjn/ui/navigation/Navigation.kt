@@ -18,6 +18,11 @@ import com.glowstudio.android.blindsjn.feature.board.WritePostScreen
 import com.glowstudio.android.blindsjn.feature.login.LoginScreen
 import com.glowstudio.android.blindsjn.feature.login.SignupScreen
 
+/**
+ * Sets up the navigation graph for the application, defining routes and their corresponding composable screens.
+ *
+ * Configures navigation transitions, handles argument parsing for dynamic routes, and updates the top bar state based on the current destination. Each route displays the appropriate screen and manages navigation callbacks for user actions such as login, signup, viewing details, editing profiles, and more.
+ */
 @Composable
 fun AppNavHost(
     navController: NavHostController,

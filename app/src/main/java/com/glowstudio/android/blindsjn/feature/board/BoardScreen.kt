@@ -17,6 +17,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 
+/**
+ * Displays a grid of board categories and navigates to the detail screen when a category is selected.
+ *
+ * Retrieves the list of board categories from the ViewModel and presents them in a two-column grid layout.
+ * Selecting a category navigates to its detail screen using the category title as a route parameter.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BoardScreen(navController: NavController) {

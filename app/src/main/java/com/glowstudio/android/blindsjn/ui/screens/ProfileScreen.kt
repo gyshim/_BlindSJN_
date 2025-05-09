@@ -20,6 +20,17 @@ import androidx.compose.ui.unit.dp
 import com.glowstudio.android.blindsjn.data.network.AutoLoginManager
 import kotlinx.coroutines.launch
 
+/**
+ * Displays the user profile screen with profile information and a menu of actions.
+ *
+ * Shows a profile section, a list of menu options ("프로필 변경", "연락처 변경", "사업자 인증", "로그아웃"), and handles user interactions for each menu item.
+ * Presents a confirmation dialog when the logout option is selected and triggers the appropriate callback upon confirmation.
+ *
+ * @param onLogoutClick Called after successful logout confirmation and login data clearance.
+ * @param onBusinessCertificationClick Called when the "사업자 인증" menu item is selected.
+ * @param onProfileEditClick Called when the "프로필 변경" menu item is selected.
+ * @param onContactEditClick Called when the "연락처 변경" menu item is selected.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(

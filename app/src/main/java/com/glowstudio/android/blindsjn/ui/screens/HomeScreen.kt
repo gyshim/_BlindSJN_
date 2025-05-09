@@ -177,6 +177,12 @@ private val shortcutItems = listOf(
     ShortcutItem("캘린더", "📅")
 )
 
+/**
+ * Displays a section of hot posts with a header and a list of popular posts.
+ *
+ * Shows a titled section with a "더 보기" (More) button that navigates to the "popular" screen.
+ * Renders a rounded card containing a vertical list of example hot posts, each separated by a divider except after the last item.
+ */
 @Composable
 fun HotPostsSection(navController: NavHostController) {
     // 예시 데이터

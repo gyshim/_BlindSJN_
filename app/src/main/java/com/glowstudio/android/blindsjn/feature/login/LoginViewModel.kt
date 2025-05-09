@@ -27,24 +27,52 @@ class LoginViewModel : ViewModel() {
 
     private var onLoginSuccess: ((Boolean) -> Unit)? = null
 
+    /**
+     * Sets a callback to be invoked when a login attempt completes.
+     *
+     * @param callback Function to be called with `true` if login succeeds, `false` otherwise.
+     */
     fun setOnLoginSuccess(callback: (Boolean) -> Unit) {
         onLoginSuccess = callback
     }
 
+    /**
+     * Updates the phone number in the UI state, allowing only digit characters.
+     *
+     * Non-digit characters in the input are removed before updating the state.
+     *
+     * @param phoneNumber The input string to set as the phone number.
+     */
     fun updatePhoneNumber(phoneNumber: String) {
         _uiState.value = _uiState.value.copy(
             phoneNumber = phoneNumber.filter { it.isDigit() }
         )
     }
 
+    /**
+     * Updates the password field in the login UI state.
+     *
+     * @param password The new password entered by the user.
+     */
     fun updatePassword(password: String) {
         _uiState.value = _uiState.value.copy(password = password)
     }
 
+    /**
+     * Updates the auto-login enabled state in the UI.
+     *
+     * @param enabled Whether auto-login should be enabled.
+     */
     fun updateAutoLogin(enabled: Boolean) {
         _uiState.value = _uiState.value.copy(autoLoginEnabled = enabled)
     }
 
+    /**
+     * Checks if auto-login is enabled and, if so, attempts to log in using saved credentials.
+     *
+     * Updates the UI state to reflect network errors, loading status, and invalid credentials as appropriate.
+     * Invokes the login success callback if login is successful.
+     */
     fun checkAutoLogin(context: Context) {
         viewModelScope.launch {
             if (!isNetworkAvailable(context)) {
@@ -79,6 +107,13 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Attempts to log in with the provided phone number and password.
+     *
+     * Validates input fields and network availability before performing the login operation asynchronously.
+     * Updates the UI state to reflect loading, error popups for empty fields, invalid credentials, or network errors.
+     * On successful login, saves login information and invokes the success callback if set.
+     */
     fun login(context: Context, phoneNumber: String, password: String) {
         if (_uiState.value.isLoading) return
 
@@ -116,14 +151,23 @@ class LoginViewModel : ViewModel() {
         }
     }
 
+    /**
+     * Hides the popup indicating that required fields are empty.
+     */
     fun dismissEmptyFieldsPopup() {
         _uiState.value = _uiState.value.copy(showEmptyFieldsPopup = false)
     }
 
+    /**
+     * Hides the invalid credentials popup in the login UI state.
+     */
     fun dismissInvalidCredentialsPopup() {
         _uiState.value = _uiState.value.copy(showInvalidCredentialsPopup = false)
     }
 
+    /**
+     * Hides the network error popup in the login UI state.
+     */
     fun dismissNetworkErrorPopup() {
         _uiState.value = _uiState.value.copy(showNetworkErrorPopup = false)
     }
